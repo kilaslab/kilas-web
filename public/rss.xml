@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+	<channel>
+		<title>Kilaslab notes</title>
+		<link>/notes</link>
+		<description>Engineering and design notes from the people building Kilaslab's products.</description>
+		<item>
+			<title>Designing chrome that still looks like chrome</title>
+			<link>/notes/designing-chrome-that-still-looks-like-chrome</link>
+			<pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>The case for a single binary in an AI stack</title>
+			<link>/notes/the-case-for-a-single-binary-in-an-ai-stack</link>
+			<pubDate>Sat, 26 Sep 2026 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>What an agent actually needs from your API</title>
+			<link>/notes/what-an-agent-actually-needs-from-your-api</link>
+			<pubDate>Sat, 12 Sep 2026 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>We rewrote our docs and cut support in half</title>
+			<link>/notes/we-rewrote-our-docs-and-cut-support-in-half</link>
+			<pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>SQLite is not a toy</title>
+			<link>/notes/sqlite-is-not-a-toy</link>
+			<pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Shipping is a design decision</title>
+			<link>/notes/shipping-is-a-design-decision</link>
+			<pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
+		</item>
+	</channel>
+</rss>

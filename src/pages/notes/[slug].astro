@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteNav from '../../components/landing/SiteNav.astro';
+import SiteFooter from '../../components/landing/SiteFooter.astro';
+import Icon from '../../components/landing/Icon.astro';
+import NoteCard from '../../components/notes/NoteCard.astro';
+import Newsletter from '../../components/notes/Newsletter.astro';
+import { notes, relatedNotes, type Note } from '../../data/notes';
+
+export function getStaticPaths() {
+	return notes.map((note) => ({
+		params: { slug: note.slug },
+		props: { note },
+	}));
+}
+
+interface Props {
+	note: Note;
+}
+
+const { note } = Astro.props;
+const related = relatedNotes(note);
+---
+
+<Layout title={`${note.title} · Kilaslab`} description={note.excerpt}>
+	<div class="overflow-x-clip bg-paper text-ink">
+		<SiteNav current="notes" />
+		<main>
+			<article>
+				<header class="site-container border-b border-rule pt-12 pb-12 lg:pt-16 lg:pb-16">
+					<a
+						href="/notes"
+						class="inline-flex items-center gap-1.5 font-label text-[13px] leading-none tracking-[0.06em] uppercase hover:opacity-70"
+					>
+						<Icon name="arrow-left" class="size-3.5" />
+						All notes
+					</a>
+					<div class="mt-10 flex max-w-[920px] flex-col gap-6">
+						<p class="flex items-center gap-4 font-label text-xs leading-none tracking-[0.06em] uppercase">
+							<span class="text-forest">{note.category}</span>
+							<span class="text-moss">{note.date}</span>
+						</p>
+						<h1 class="text-[2.5rem] leading-[1.04] tracking-[-0.04em] sm:text-[3.25rem] lg:text-[4rem]">{note.title}</h1>
+						<p class="max-w-[720px] text-[19px] leading-normal tracking-[-0.1px] text-moss">{note.excerpt}</p>
+						<p class="text-[15px] text-moss">{note.minutes} min read</p>
+					</div>
+				</header>
+
+				<figure class="site-container pt-10">
+					<img
+						src={note.image}
+						alt=""
+						class="h-[280px] w-full rounded-xl object-cover grayscale sm:h-[420px] lg:h-[520px]"
+					/>
+				</figure>
+
+				<div class="site-container py-16 lg:py-20">
+					<div class="flex max-w-[840px] flex-col gap-5">
+					{
+						note.body.map((block) => {
+							if (block.type === 'h2') {
+								return <h2 class="pt-6 text-[1.75rem] leading-[1.2] tracking-[-0.03em]">{block.text}</h2>;
+							}
+							if (block.type === 'code') {
+								return (
+									<pre class="overflow-x-auto rounded-xl bg-editor px-5 py-4 font-code text-[13px] leading-relaxed whitespace-pre text-editor-fg">{block.text}</pre>
+								);
+							}
+							return <p class="text-[19px] leading-[1.65] tracking-[-0.1px]">{block.text}</p>;
+						})
+					}
+					</div>
+				</div>
+			</article>
+
+			<section class="border-t border-rule py-16 lg:py-20" aria-labelledby="more-notes">
+				<div class="site-container">
+				<h2 id="more-notes" class="pb-8 text-[2rem] leading-[1.1] tracking-[-0.03em]">More from the lab.</h2>
+				<div class="grid gap-4 lg:grid-cols-12">
+					{related.map((item) => <NoteCard note={item} layout="pair" />)}
+				</div>
+				</div>
+			</section>
+
+			<Newsletter />
+		</main>
+		<SiteFooter page="notes" />
+	</div>
+</Layout>

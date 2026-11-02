@@ -1,0 +1,18 @@
+---
+import EditorPreview from './EditorPreview.astro';
+---
+
+<section class="site-container flex flex-col gap-12 pb-20 lg:pb-32">
+	<div class="flex max-w-[680px] flex-col gap-4" data-reveal>
+		<h2 class="text-[2rem] leading-[1.15] tracking-[-0.025em]">Every product starts as a commit.</h2>
+		<p class="max-w-[640px] text-lg leading-normal text-moss">
+			Designed and written by one team. Every change is typed, tested, and deployed from main, and you own the repository from day one.
+		</p>
+	</div>
+	<div
+		class="relative flex w-full justify-center overflow-hidden rounded-xl bg-cover bg-no-repeat bg-[position:60%_40%] px-4 pt-16 pb-16 sm:px-8 lg:h-[900px] lg:items-start lg:px-0 lg:pt-[136px] lg:pb-0"
+		style="background-image: url('/horizon.png')"
+	>
+		<EditorPreview />
+	</div>
+</section>

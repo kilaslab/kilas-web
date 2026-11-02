@@ -1,3 +1,18 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Kilaslab',
+	description = 'Kilaslab designs and builds web apps, internal tools, and AI systems, from the first sketch to production.',
+} = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -6,18 +21,57 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="description" content={description} />
+		<title>{title}</title>
+		<ClientRouter />
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
 	</head>
-	<body>
+	<body class="bg-paper text-ink antialiased">
 		<slot />
+		<script>
+			const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+			document.addEventListener('astro:after-swap', () => {
+				document.documentElement.classList.add('js');
+			});
+			let revealObserver: IntersectionObserver | undefined;
+
+			const revealAll = () => {
+				for (const item of document.querySelectorAll<HTMLElement>('[data-reveal]')) {
+					item.classList.add('is-revealed');
+				}
+			};
+
+			const initReveals = () => {
+				revealObserver?.disconnect();
+
+				if (motionQuery.matches) {
+					revealAll();
+					return;
+				}
+
+				const items = [...document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-revealed)')];
+				if (items.length === 0) return;
+
+				revealObserver = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							if (!entry.isIntersecting) continue;
+							entry.target.classList.add('is-revealed');
+							revealObserver?.unobserve(entry.target);
+						}
+					},
+					{ rootMargin: '0px 0px -10% 0px', threshold: 0.08 },
+				);
+
+				for (const item of items) revealObserver.observe(item);
+			};
+
+			document.addEventListener('astro:page-load', initReveals);
+			document.addEventListener('astro:before-swap', () => revealObserver?.disconnect());
+			motionQuery.addEventListener('change', initReveals);
+		</script>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

@@ -1,0 +1,75 @@
+---
+interface Props {
+	page?: 'home' | 'notes';
+}
+
+const { page = 'home' } = Astro.props;
+const home = (hash: string) => (page === 'home' ? hash : `/${hash}`);
+
+const columns: {
+	title: string;
+	links: { label: string; href: string }[];
+}[] = [
+	{
+		title: 'Work',
+		links: [
+			{ label: 'Web apps', href: home('#web-apps') },
+			{ label: 'Internal tools', href: home('#internal-tools') },
+			{ label: 'AI systems', href: home('#ai-systems') },
+		],
+	},
+	{
+		title: 'Open source',
+		links: [
+			{ label: 'kilas-flow', href: 'https://github.com/kilaslab/kilas-flow' },
+			{ label: 'ccprovider', href: 'https://github.com/kilaslab/ccprovider' },
+			{ label: 'GitHub', href: 'https://github.com/kilaslab' },
+		],
+	},
+	{
+		title: 'Studio',
+		links: [
+			{ label: 'Start a project', href: home('#start') },
+			{ label: 'Notes', href: '/notes' },
+			{ label: 'RSS', href: '/rss.xml' },
+		],
+	},
+];
+---
+
+<footer class="bg-canopy text-paper">
+	<div class="site-container flex flex-col gap-16 pt-16 pb-12">
+	<div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
+		<div class="flex flex-col gap-5">
+			<a href={page === 'home' ? '#top' : '/'} class="flex items-center gap-3">
+				<span class="flex size-9 items-center justify-center rounded-lg bg-gold text-lg font-bold leading-none text-ink">K</span>
+				<span class="text-[2.125rem] leading-none tracking-[-0.03em]">Kilaslab</span>
+			</a>
+			<p class="max-w-[320px] text-base leading-[1.55] text-mist">
+				Software and AI, built to ship. We publish the tools we build with.
+			</p>
+		</div>
+		{
+			columns.map((column) => (
+				<nav class="flex flex-col gap-4" aria-label={column.title}>
+					<p class="font-label text-xs leading-none tracking-[0.1em] text-mist uppercase">{column.title}</p>
+					{column.links.map((link) => (
+						<a
+							href={link.href}
+							class="w-fit text-base hover:opacity-70"
+							aria-current={page === 'notes' && link.href === '/notes' ? 'page' : undefined}
+							target={link.href.startsWith('http') ? '_blank' : undefined}
+							rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+						>
+							{link.label}
+						</a>
+					))}
+				</nav>
+			))
+		}
+	</div>
+	<div class="border-t border-white/8 pt-6">
+		<p class="text-[13px] text-mist">© 2026 Kilaslab. All rights reserved.</p>
+	</div>
+	</div>
+</footer>

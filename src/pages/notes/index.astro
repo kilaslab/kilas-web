@@ -1,0 +1,150 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteNav from '../../components/landing/SiteNav.astro';
+import SiteFooter from '../../components/landing/SiteFooter.astro';
+import Icon from '../../components/landing/Icon.astro';
+import NoteCard from '../../components/notes/NoteCard.astro';
+import Newsletter from '../../components/notes/Newsletter.astro';
+import { noteTopics, notes } from '../../data/notes';
+
+function filterHref(id: string) {
+	return id === 'all' ? '/notes' : `/notes?topic=${id}`;
+}
+---
+
+<Layout
+	title="Notes · Kilaslab"
+	description="Engineering and design notes from the people building Kilaslab's products."
+>
+	<div class="overflow-x-clip bg-paper text-ink">
+		<SiteNav current="notes" />
+		<main>
+			<section class="border-b border-rule">
+			<div class="site-container grid items-end gap-10 pt-16 pb-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16 lg:pt-24 lg:pb-16">
+				<div class="flex flex-col gap-6">
+					<h1 class="text-[2.5rem] leading-[1.04] tracking-[-0.04em] sm:text-[3.25rem] lg:text-[4rem]">Writing from the lab.</h1>
+					<p class="max-w-[720px] text-[19px] leading-normal tracking-[-0.1px] text-moss">
+						Engineering and design notes from the people building Kilaslab's products.
+					</p>
+				</div>
+				<div class="flex items-center justify-between gap-6 pb-2">
+					<p class="text-[15px] text-moss">New notes every other week</p>
+					<a href="/rss.xml" class="inline-flex items-center gap-1.5 font-label text-[13px] leading-none tracking-[0.06em] uppercase hover:opacity-70">
+						RSS
+						<Icon name="arrow" class="size-3.5" />
+					</a>
+				</div>
+			</div>
+			</section>
+
+			<section class="site-container pt-12 pb-20 lg:pb-28">
+				<div class="flex flex-col gap-4 pb-6 lg:flex-row lg:items-center lg:justify-between">
+					<div class="flex gap-2 overflow-x-auto">
+						{
+							noteTopics.map((item) => (
+								<a
+									href={filterHref(item.id)}
+									data-topic-link={item.id}
+									class="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border border-rule px-4 font-label text-xs leading-none tracking-[0.06em] text-ink uppercase hover:bg-sage aria-current:border-transparent aria-current:bg-forest aria-current:text-paper [&>span]:text-moss-faint aria-current:[&>span]:text-mist"
+									aria-current={item.id === 'all' ? 'true' : undefined}
+								>
+									{item.label}
+									<span>{item.count}</span>
+								</a>
+							))
+						}
+					</div>
+					<form action="/notes" method="get" class="flex h-10 w-full items-center gap-2.5 rounded-full border border-rule px-4 lg:w-[280px]">
+						<Icon name="search" class="size-4 shrink-0 text-moss" />
+						<label class="sr-only" for="note-search">Search notes</label>
+						<input
+							id="note-search"
+							name="q"
+							type="search"
+							placeholder="Search notes"
+							class="min-w-0 flex-1 bg-transparent text-sm leading-none outline-none placeholder:text-moss"
+						/>
+					</form>
+				</div>
+
+				<div id="note-grid" class="grid gap-4 lg:grid-cols-12">
+					{notes.map((note) => <NoteCard note={note} />)}
+				</div>
+				<p id="notes-empty" class="hidden py-16 text-lg text-moss">No notes match that search.</p>
+
+				<div class="flex justify-center pt-10">
+					<button
+						type="button"
+						class="inline-flex h-11 items-center rounded-full border border-rule px-6 font-label text-[13px] leading-none tracking-[0.06em] uppercase"
+					>
+						Older notes
+					</button>
+				</div>
+			</section>
+
+			<Newsletter />
+		</main>
+		<SiteFooter page="notes" />
+	</div>
+</Layout>
+
+<script>
+	const topics = new Set(['all', 'ai', 'design', 'engineering', 'open-source', 'studio']);
+
+	function applyNotesFilter() {
+		const params = new URLSearchParams(window.location.search);
+		const requested = params.get('topic') ?? 'all';
+		const topic = topics.has(requested) ? requested : 'all';
+		const query = (params.get('q') ?? '').trim().toLowerCase();
+		let shown = 0;
+
+		document.querySelectorAll<HTMLElement>('[data-note]').forEach((card) => {
+			const matchesTopic = topic === 'all' || card.dataset.topic === topic;
+			const matchesQuery = query.length === 0 || (card.dataset.title ?? '').toLowerCase().includes(query);
+			const visible = matchesTopic && matchesQuery;
+			card.hidden = !visible;
+			if (visible) shown += 1;
+		});
+
+		document.querySelectorAll<HTMLAnchorElement>('[data-topic-link]').forEach((link) => {
+			const selected = link.dataset.topicLink === topic;
+			if (selected) link.setAttribute('aria-current', 'true');
+			else link.removeAttribute('aria-current');
+			const url = new URL(link.href);
+			if (query) url.searchParams.set('q', query);
+			else url.searchParams.delete('q');
+			link.href = url.pathname + url.search;
+		});
+
+		const empty = document.getElementById('notes-empty');
+		const grid = document.getElementById('note-grid');
+		empty?.classList.toggle('hidden', shown > 0);
+		grid?.classList.toggle('hidden', shown === 0);
+
+		const search = document.querySelector<HTMLInputElement>('#note-search');
+		if (search && search.value !== (params.get('q') ?? '')) search.value = params.get('q') ?? '';
+	}
+
+	const initNotes = () => {
+		applyNotesFilter();
+
+		const form = document.getElementById('note-search')?.form;
+		if (!form || form.dataset.bound === 'true') return;
+		form.dataset.bound = 'true';
+
+		form.addEventListener('submit', () => {
+			const topic = new URLSearchParams(window.location.search).get('topic');
+			if (!topic || topic === 'all') return;
+			const existing = form.querySelector('input[name="topic"]');
+			if (existing) return;
+			const input = document.createElement('input');
+			input.type = 'hidden';
+			input.name = 'topic';
+			input.value = topic;
+			form.append(input);
+		});
+	};
+
+	document.addEventListener('astro:page-load', initNotes);
+	initNotes();
+</script>

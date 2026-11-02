@@ -1,0 +1,62 @@
+---
+import Icon from './Icon.astro';
+
+const repos = [
+	{
+		name: 'kilas-flow',
+		lang: 'Go',
+		href: 'https://github.com/kilaslab/kilas-flow',
+		body: 'An embeddable workflow engine for APIs, AI agents, and SaaS products. Single binary, API first, SQLite by default.',
+	},
+	{
+		name: 'ccprovider',
+		lang: 'TypeScript',
+		href: 'https://github.com/kilaslab/ccprovider',
+		body: 'Run Claude Code against any Anthropic-compatible provider. Named profiles, each launched as a command.',
+	},
+];
+---
+
+<section id="open-source" class="site-container py-20 lg:py-32">
+	<div class="flex flex-wrap items-end justify-between gap-6 pb-12" data-reveal>
+		<h2 class="text-[2.25rem] leading-[1.1] tracking-[-0.034em] lg:text-[2.75rem]">Repositories</h2>
+		<a
+			href="https://github.com/kilaslab"
+			class="inline-flex items-center gap-1.5 pb-2 font-label text-[13px] leading-none tracking-[0.06em] uppercase hover:opacity-70"
+			target="_blank"
+			rel="noreferrer"
+		>
+			github.com/kilaslab
+			<Icon name="arrow" class="size-3.5" />
+		</a>
+	</div>
+	<ul class="border-b border-rule">
+		{
+			repos.map((repo) => (
+				<li class="grid items-start gap-6 border-t border-rule py-9 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-8" data-reveal>
+					<div class="flex flex-col gap-3">
+						<div class="flex flex-wrap items-center gap-3">
+							<h3 class="text-[22px] leading-none tracking-[-0.4px]">{repo.name}</h3>
+							<span class="rounded-full border border-rule px-2.5 py-1.5 font-label text-[11px] leading-none tracking-[0.06em] text-moss uppercase">
+								{repo.lang}
+							</span>
+						</div>
+						<p class="max-w-[620px] text-base leading-[1.55] text-moss">{repo.body}</p>
+					</div>
+					<a
+						href={repo.href}
+						class="inline-flex items-center gap-1.5 pt-1 font-label text-[13px] leading-none tracking-[0.06em] uppercase hover:opacity-70"
+						target="_blank"
+						rel="noreferrer"
+					>
+						View
+						<Icon name="arrow" class="size-3.5" />
+					</a>
+				</li>
+			))
+		}
+	</ul>
+	<p class="max-w-[720px] pt-7 text-sm leading-[1.6] text-moss">
+		Also public: responsive-simulator, pundiku, and claudecodeui, a fork of CloudCLI.
+	</p>
+</section>

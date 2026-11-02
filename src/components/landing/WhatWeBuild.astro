@@ -1,0 +1,40 @@
+---
+const rows = [
+	{
+		id: 'web-apps',
+		title: 'Web apps',
+		body: 'Customer-facing products with real accounts and payments behind them.',
+	},
+	{
+		id: 'internal-tools',
+		title: 'Internal tools',
+		body: 'Dashboards and back-office workflows that replace the spreadsheet your team outgrew.',
+	},
+	{
+		id: 'ai-systems',
+		title: 'AI systems',
+		body: 'Agents and model features built into the product you already run.',
+	},
+];
+---
+
+<section id="work" class="bg-canopy pt-24 pb-20 text-paper">
+	<div class="site-container">
+	<h2 class="pb-10 text-[2rem] leading-[1.15] tracking-[-0.025em]" data-reveal>What we build</h2>
+	<ul>
+		{
+			rows.map((row, index) => (
+				<li
+					id={row.id}
+					class="grid items-end gap-6 border-t border-white/8 py-8 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-12 lg:py-10"
+					data-reveal
+					style={`--reveal-delay:${index * 70}ms`}
+				>
+					<h3 class="font-display text-5xl leading-none font-light tracking-[-0.027em] sm:text-7xl lg:text-8xl">{row.title}</h3>
+					<p class="max-w-[400px] pb-1 text-[17px] leading-[1.55] text-mist lg:pb-3">{row.body}</p>
+				</li>
+			))
+		}
+	</ul>
+	</div>
+</section>

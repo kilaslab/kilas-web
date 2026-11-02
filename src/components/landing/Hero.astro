@@ -1,0 +1,472 @@
+---
+import Icon from './Icon.astro';
+
+const city = `                                                                                
+                                         .                                      
+                                 .       ,.                                     
+                          ...............:......                                
+                      ...........,.......;:.............                        
+                   .......,,,,,,,,,,,,,,.~-.,,................                  
+                 ......,,,,,,::,::::::,:.~^,:,,,,,,,,,............              
+              .......,,,,,::::::::::::::,~+,;:,,,,,,,,,,,,,,,........           
+              .....,,,,,,,:::::::;::;;;;,;=:~;::::::::::::::,,,,,,.....         
+            .......,,,,,,,:::::::;;;;;~;,;=;~~;;;;;;;;;;;;;;::::,,,,.....       
+           ......,,,,,,,:::::::::;;;;~~;,;=~--;;;;;;;;;;;;;;;;;::::,,,....      
+         ......,,,,,:::::::::;:::;;;;;;;,;=-~-~~~~~~~~~~~~~~~~;;;::::,,,....    
+        ....,,,,,::::::::::;;;;;;;~;;;;:,:=-~^~~~~-------~~~~~~~;;;:::,,,,...   
+      .....,,,,::::::::::;;;;;;;;;~;;~:,,:=-~+~~~~~~~~~~~~~--~~~~~;;;:::,,,...  
+     ....,,,,:::::::;;;;;;;;;;;;~;~~~~:,,:=^-=-----~~~~~~~~--------~~;;:::,,... 
+    ....,,,:::;;;;;;;;;;;;;~~~~~~;~~~~:,::++-=---------------------~~~;;:::,,...
+   ...,,,,::;;;;;;;;;~~~~~~~~~~~-:----:,::^+^=^^----------------^^---~~;;:::,,..
+  ...,,,:::;;;;;~~~~~~~~~~~------:-^--:,::~=^=^^^^^^^^^^^^^^^^^^-^^^---~~;;::,,.
+  ..,,,:::;;~~~~~~~~-----------^~:-^^^:,:::=+=+^^^^^^^^^^^^^^^^^~^^^^^--~~;;::,,
+ ...,,:::;~~~~-------------^^^~^~:-+^^::,,:~=+=^+^+++++++++++++^;^+++^^--~~;;:,,
+ ..,,,::;;---------^^^^^^^^^^^;^~:-++-:,,,,:~-+=++++++=======+++~^++++^^~~~;;:,,
+...,,::;;;------^^^^^^^^^++++^:-;:^==~::,,,:,;~-+==+++++=====^;+~^====++~;-~;;:,
+..,,,::;~;~^--^^^^^^^^^^^^+^+~:;~;-+-::::,,,:::;-^^^=======+=~:~;--+-~-~::::,...
+..,,::;;~~~^^^^^^^^^^++++++++~;~-;;;:,::::,,,,,;~;:;;;;;;;;;;::::;;:;~~;::::,,,,
+..,,:::;;;~-----^^^^^^^^^^-~;:;-~;:::,:;:::,,,,:;;::::;~-^^^+;::;;;;-^+^~;~~;::,
+ ...,::;;~~-------^---~~;;;;~~-^--~;;:::,,,,,..,,,,,,,,,:;;;;:::;::,,,,,,,,,,...
+   ...,,::;~~~;;:,,,.,,,,,:~~~~-~~:;::::,......,,,.,,,,,,,::,..... ..           
+  ..........,,,,,,,.......,,,....... ..                   .. ..   .             
+  ..........       .           . ..                                             
+      ...                 ...,.      ...                                        
+     .............,........,....... ...                                         
+  ......,,,,,,,..........,:;:,:::,..,,:,.......................                 
+    ....,,,::::::::::;;:::~--^==+~:::::,,,...,,,,,,,,,,,,::,,,,,.......         
+     ...,,,,::::;;;;;~-~;;;~~;~-;:::,,,,,,..,,,,:::,,,:::~~::,,,........        
+      .....,,,:::::::;;;;;:;~:;;:::,,........,,:;:::,,,;;;;::,.,.........       
+        ...,,,,,,::::::::::::,,::,:~;,,,....,,,:~::;;::,,,,,,.....,.....        
+          .......,,,,,,,,,,,,,.,,,:^~:,,,..,,,,:;::;:::::::::,.......           
+              .........,,,,,,..,..:~:,,,...,,,,~;:::::::::::,........           
+                    ..............,:,,.....,:,:;;:::,,,,,,,.....                
+                             . .. .....    ,:,:,,,.........                     
+                                    .      .,,,.....                            
+                                           ....                                 
+                                                                                `;
+
+const cityRows = city.replace(/^\n/, '').split('\n');
+const cols = Math.max(...cityRows.map((line) => line.length));
+const glyphs = cityRows.flatMap((line, row) =>
+	[...line].flatMap((ch, col) => (ch === ' ' ? [] : [{ ch, col, row }])),
+);
+---
+
+<section class="site-container grid items-center gap-10 pt-10 pb-16 lg:min-h-[640px] lg:grid-cols-[minmax(0,1fr)_minmax(280px,32rem)] lg:gap-16">
+	<div class="flex max-w-[640px] flex-col items-start gap-8">
+		<h1 class="text-[2.5rem] leading-[1.04] tracking-[-0.04em] sm:text-[3.25rem] lg:text-[4rem]">
+			Software and AI,<br />built to ship.
+		</h1>
+		<p class="max-w-[560px] text-[19px] leading-normal tracking-[-0.1px] text-moss">
+			Kilaslab designs and builds web apps, internal tools, and AI systems, from the first sketch to production.
+		</p>
+		<div class="flex flex-wrap items-center gap-3 pt-2">
+			<a
+				href="#start"
+				class="inline-flex h-11 items-center rounded-full bg-forest px-6 font-label text-sm leading-none tracking-[0.06em] text-paper uppercase hover:opacity-90"
+			>
+				Start a project
+			</a>
+			<a
+				href="https://github.com/kilaslab"
+				class="inline-flex h-11 items-center gap-2 rounded-full border border-rule px-6 font-label text-sm leading-none tracking-[0.06em] uppercase hover:opacity-70"
+				target="_blank"
+				rel="noreferrer"
+			>
+				View on GitHub
+				<Icon name="arrow" class="size-3.5" />
+			</a>
+		</div>
+	</div>
+	<div
+		class="hero-mark relative ml-auto cursor-crosshair"
+		data-hero-mark
+		data-cols={cols}
+		data-rows={cityRows.length}
+		aria-hidden="true"
+	>
+		<div
+			class="hero-glyphs grid font-label text-[7px] leading-[1.2] text-moss lg:text-[10px]"
+			style={`grid-template-columns:repeat(${cols},1ch);grid-template-rows:repeat(${cityRows.length},1.2em)`}
+		>
+			{
+				glyphs.map((glyph) => (
+					<span
+						class="hero-glyph"
+						data-col={glyph.col}
+						data-row={glyph.row}
+						style={`grid-column:${glyph.col + 1};grid-row:${glyph.row + 1}`}
+					>
+						{glyph.ch}
+					</span>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<noscript>
+	<style is:inline>
+		.hero-glyph {
+			opacity: 1 !important;
+		}
+	</style>
+</noscript>
+
+<style>
+	.hero-mark {
+		--hero-spark: #b17c14;
+		isolation: isolate;
+	}
+
+	.hero-glyphs {
+		position: relative;
+		z-index: 1;
+	}
+
+	.hero-glyph {
+		opacity: 0;
+		color: var(--color-moss);
+		translate: var(--px, 0px) var(--py, 0px);
+		scale: 1;
+		transition:
+			opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+			color 200ms ease-out,
+			translate 480ms cubic-bezier(0.22, 1, 0.36, 1),
+			scale 220ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.hero-glyph.is-on {
+		opacity: 1;
+	}
+
+	.hero-glyph.is-near {
+		color: var(--color-ink);
+	}
+
+	.hero-glyph.is-core {
+		color: #7d5408;
+		scale: 1.14;
+	}
+
+	.hero-glyph.is-spark {
+		color: var(--hero-spark);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-glyph {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	const RAMP = '.,:;~-^+=';
+	const LEVELS = new Map([...RAMP].map((char, index) => [char, index]));
+
+	type Glyph = {
+		el: HTMLElement;
+		rest: string;
+		level: number;
+		col: number;
+		row: number;
+		spark: number | null;
+		lens: number | null;
+		token: number;
+	};
+
+	let cleanupHero: (() => void) | null = null;
+
+	const initHero = () => {
+		const root = document.querySelector<HTMLElement>('[data-hero-mark]');
+		const grid = root?.querySelector<HTMLElement>('.hero-glyphs');
+		if (!root || !grid || root.dataset.ready === 'true') return;
+		root.dataset.ready = 'true';
+
+		const cols = Number(root.dataset.cols);
+		const rows = Number(root.dataset.rows);
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const timers = new Set<number>();
+		let idleTimer = 0;
+		let visible = true;
+
+		const after = (ms: number, fn: () => void) => {
+			const id = window.setTimeout(() => {
+				timers.delete(id);
+				fn();
+			}, ms);
+			timers.add(id);
+			return id;
+		};
+
+		const glyphs: Glyph[] = [...grid.querySelectorAll<HTMLElement>('.hero-glyph')].map((el) => {
+			const rest = el.textContent ?? '.';
+			return {
+				el,
+				rest,
+				level: LEVELS.get(rest) ?? 0,
+				col: Number(el.dataset.col),
+				row: Number(el.dataset.row),
+				spark: null,
+				lens: null,
+				token: 0,
+			};
+		});
+
+		const byCell = new Map<string, Glyph>();
+		for (const glyph of glyphs) byCell.set(`${glyph.col}:${glyph.row}`, glyph);
+
+		const paint = (glyph: Glyph) => {
+			const level = glyph.spark ?? glyph.lens ?? glyph.level;
+			const next = RAMP[Math.min(RAMP.length - 1, Math.max(0, level))] ?? glyph.rest;
+			if (glyph.el.textContent !== next) glyph.el.textContent = next;
+		};
+
+		const light = (glyph: Glyph, duration = 320) => {
+			if (glyph.spark !== null) return;
+			glyph.spark = Math.min(RAMP.length - 1, glyph.level + 1);
+			paint(glyph);
+			glyph.el.classList.add('is-spark');
+			const token = ++glyph.token;
+			after(duration, () => {
+				if (glyph.token !== token) return;
+				glyph.spark = null;
+				paint(glyph);
+				glyph.el.classList.remove('is-spark');
+			});
+		};
+
+		const neighbor = (anchor: Glyph) => {
+			for (let attempt = 0; attempt < 12; attempt += 1) {
+				const glyph = glyphs[(Math.random() * glyphs.length) | 0];
+				if (glyph === anchor) continue;
+				if (Math.abs(glyph.col - anchor.col) <= 2 && Math.abs(glyph.row - anchor.row) <= 3) return glyph;
+			}
+			return null;
+		};
+
+		const idleSparks = () => {
+			idleTimer = 0;
+			if (!visible || reduceMotion.matches) return;
+			const anchor = glyphs[(Math.random() * glyphs.length) | 0];
+			light(anchor, 300 + Math.random() * 260);
+			if (Math.random() < 0.22) {
+				const extra = 1 + Math.floor(Math.random() * 3);
+				for (let index = 0; index < extra; index += 1) {
+					const glyph = neighbor(anchor);
+					if (!glyph) break;
+					after(50 + Math.random() * 150, () => light(glyph, 260 + Math.random() * 240));
+				}
+			}
+			idleTimer = window.setTimeout(idleSparks, 100 + Math.random() * 180);
+		};
+
+		const startIdle = () => {
+			if (!idleTimer && visible && !reduceMotion.matches) idleSparks();
+		};
+
+		const reveal = () => {
+			if (reduceMotion.matches) {
+				for (const glyph of glyphs) glyph.el.classList.add('is-on');
+				return;
+			}
+
+			const start = performance.now();
+			const wave = 900;
+			const flick = 170;
+			const queue = glyphs
+				.map((glyph) => ({
+					glyph,
+					at: (glyph.row / rows) * wave + (glyph.col / cols) * 160 + Math.random() * 80,
+				}))
+				.sort((a, b) => a.at - b.at);
+			let cursor = 0;
+			let nextFlick = 0;
+			const active: { glyph: Glyph; at: number }[] = [];
+
+			const step = (now: number) => {
+				const elapsed = now - start;
+				while (cursor < queue.length && queue[cursor].at <= elapsed) {
+					const item = queue[cursor];
+					cursor += 1;
+					item.glyph.el.classList.add('is-on');
+					active.push(item);
+				}
+				if (now >= nextFlick) {
+					nextFlick = now + 45;
+					for (const item of active) {
+						if (elapsed >= item.at + flick) continue;
+						const char = RAMP[(Math.random() * RAMP.length) | 0];
+						if (item.glyph.el.textContent !== char) item.glyph.el.textContent = char;
+					}
+				}
+				for (let index = active.length - 1; index >= 0; index -= 1) {
+					const item = active[index];
+					if (elapsed < item.at + flick) continue;
+					item.glyph.el.textContent = item.glyph.rest;
+					active.splice(index, 1);
+				}
+				if (cursor < queue.length || active.length > 0) {
+					requestAnimationFrame(step);
+				} else {
+					after(260, startIdle);
+				}
+			};
+
+			requestAnimationFrame(step);
+		};
+
+		const lensed = new Set<Glyph>();
+		let pointerX = 0;
+		let pointerY = 0;
+		let pointerIn = false;
+		let lensFrame = 0;
+
+		const setLens = (glyph: Glyph, near: boolean, core: boolean) => {
+			if (!near) {
+				glyph.el.classList.remove('is-near', 'is-core');
+				glyph.el.style.removeProperty('--px');
+				glyph.el.style.removeProperty('--py');
+				glyph.lens = null;
+				paint(glyph);
+				return;
+			}
+			glyph.el.classList.add('is-near');
+			glyph.el.classList.toggle('is-core', core);
+			const level = glyph.level + (core ? 2 : 1);
+			if (glyph.lens !== level) {
+				glyph.lens = level;
+				paint(glyph);
+			}
+		};
+
+		const updateLens = () => {
+			lensFrame = 0;
+			if (!pointerIn) return;
+
+			const bounds = grid.getBoundingClientRect();
+			const cellWidth = bounds.width / cols;
+			const cellHeight = bounds.height / rows;
+			const col = (pointerX - bounds.left) / cellWidth;
+			const row = (pointerY - bounds.top) / cellHeight;
+			const nearRadius = 76;
+			const coreRadius = 28;
+			const spanX = Math.ceil(nearRadius / cellWidth);
+			const spanY = Math.ceil(nearRadius / cellHeight);
+			const nextNear = new Set<Glyph>();
+			const nextCore = new Set<Glyph>();
+
+			for (let cellRow = Math.floor(row) - spanY; cellRow <= Math.ceil(row) + spanY; cellRow += 1) {
+				for (let cellCol = Math.floor(col) - spanX; cellCol <= Math.ceil(col) + spanX; cellCol += 1) {
+					const glyph = byCell.get(`${cellCol}:${cellRow}`);
+					if (!glyph) continue;
+					const dx = (glyph.col + 0.5 - col) * cellWidth;
+					const dy = (glyph.row + 0.5 - row) * cellHeight;
+					const distance = Math.hypot(dx, dy);
+					if (distance > nearRadius) continue;
+					nextNear.add(glyph);
+					if (distance < coreRadius) nextCore.add(glyph);
+					const strength = 2.6 * (1 - distance / nearRadius) ** 2;
+					const length = distance || 1;
+					glyph.el.style.setProperty('--px', `${((dx / length) * strength).toFixed(2)}px`);
+					glyph.el.style.setProperty('--py', `${((dy / length) * strength).toFixed(2)}px`);
+				}
+			}
+
+			for (const glyph of lensed) {
+				if (!nextNear.has(glyph)) setLens(glyph, false, false);
+				else setLens(glyph, true, nextCore.has(glyph));
+			}
+			for (const glyph of nextNear) {
+				if (!lensed.has(glyph)) setLens(glyph, true, nextCore.has(glyph));
+			}
+			lensed.clear();
+			for (const glyph of nextNear) lensed.add(glyph);
+		};
+
+		const clearLens = () => {
+			pointerIn = false;
+			if (lensFrame) cancelAnimationFrame(lensFrame);
+			lensFrame = 0;
+			for (const glyph of lensed) setLens(glyph, false, false);
+			lensed.clear();
+		};
+
+		root.addEventListener('pointermove', (event) => {
+			if (event.pointerType === 'touch' || reduceMotion.matches) return;
+			pointerX = event.clientX;
+			pointerY = event.clientY;
+			pointerIn = true;
+			if (!lensFrame) lensFrame = requestAnimationFrame(updateLens);
+		});
+		root.addEventListener('pointerleave', clearLens);
+
+		let burstAt = 0;
+		const burst = (clientX: number, clientY: number) => {
+			if (reduceMotion.matches) return;
+			const now = performance.now();
+			if (now - burstAt < 320) return;
+			burstAt = now;
+
+			const bounds = grid.getBoundingClientRect();
+			const cellWidth = bounds.width / cols;
+			const cellHeight = bounds.height / rows;
+			const col = (clientX - bounds.left) / cellWidth;
+			const row = (clientY - bounds.top) / cellHeight;
+			const radius = 300;
+			const hits: { glyph: Glyph; distance: number }[] = [];
+
+			for (const glyph of glyphs) {
+				const dx = (glyph.col + 0.5 - col) * cellWidth;
+				const dy = (glyph.row + 0.5 - row) * cellHeight;
+				const distance = Math.hypot(dx, dy);
+				if (distance > radius) continue;
+				if (Math.random() < 0.32) continue;
+				hits.push({ glyph, distance });
+			}
+
+			hits.sort((a, b) => a.distance - b.distance);
+			for (const { glyph, distance } of hits) {
+				after(distance * 1.05, () => light(glyph, 170 + Math.random() * 160));
+			}
+		};
+		root.addEventListener('pointerdown', (event) => burst(event.clientX, event.clientY));
+
+		const visibility = new IntersectionObserver(
+			([entry]) => {
+				visible = entry.isIntersecting;
+				if (visible) startIdle();
+				else if (idleTimer) {
+					window.clearTimeout(idleTimer);
+					idleTimer = 0;
+				}
+			},
+			{ threshold: 0.05 },
+		);
+		visibility.observe(root);
+
+		cleanupHero = () => {
+			if (idleTimer) window.clearTimeout(idleTimer);
+			idleTimer = 0;
+			for (const id of timers) window.clearTimeout(id);
+			timers.clear();
+			if (lensFrame) cancelAnimationFrame(lensFrame);
+			lensFrame = 0;
+			visibility.disconnect();
+		};
+
+		reveal();
+	};
+
+	document.addEventListener('astro:page-load', initHero);
+	document.addEventListener('astro:before-swap', () => {
+		cleanupHero?.();
+		cleanupHero = null;
+	});
+	window.addEventListener('pagehide', () => {
+		cleanupHero?.();
+		cleanupHero = null;
+	});
+
+	initHero();
+</script>

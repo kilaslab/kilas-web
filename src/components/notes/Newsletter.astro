@@ -1,0 +1,61 @@
+<section
+	id="newsletter"
+	class="relative flex h-[720px] flex-col items-start overflow-hidden bg-[linear-gradient(180deg,var(--color-dusk-top)_0%,var(--color-dusk-top)_44%,var(--color-dusk-mid)_54%,var(--color-dusk-low)_62%)] lg:h-[860px]"
+>
+	<div
+		class="absolute inset-x-0 bottom-0 h-[340px] bg-cover bg-no-repeat bg-[position:60%_82%]"
+		style="background-image: url('/horizon.png')"
+		aria-hidden="true"
+	>
+	</div>
+	<div
+		class="absolute inset-x-0 bottom-[200px] h-[140px] bg-[linear-gradient(180deg,var(--color-dusk-low),transparent)]"
+		aria-hidden="true"
+	>
+	</div>
+	<div
+		class="absolute inset-x-0 bottom-0 h-[220px] bg-[linear-gradient(180deg,transparent,var(--color-canopy))]"
+		aria-hidden="true"
+	>
+	</div>
+	<div class="site-container relative flex flex-col items-start gap-6 pt-20 lg:pt-24">
+		<h2 class="font-display text-[3.25rem] leading-none font-light tracking-[-0.03em] text-paper sm:text-7xl lg:text-[6.5rem]">
+			Notes in your inbox.
+		</h2>
+		<p class="text-[19px] leading-normal text-paper">One email when a new note ships.</p>
+		<form id="newsletter-form" class="flex flex-col gap-2 pt-4">
+			<label for="email" class="text-sm text-paper">Email address</label>
+			<div class="flex h-12 w-full max-w-[460px] items-center justify-between rounded-full bg-paper py-1.5 pr-1.5 pl-5">
+				<input
+					id="email"
+					type="email"
+					required
+					autocomplete="email"
+					placeholder="you@company.com"
+					class="min-w-0 flex-1 bg-transparent text-[15px] leading-none text-ink outline-none placeholder:text-moss"
+				/>
+				<button
+					type="submit"
+					class="inline-flex h-9 shrink-0 items-center rounded-full bg-forest px-4 font-label text-[13px] leading-none tracking-[0.06em] text-paper uppercase"
+				>
+					Subscribe
+				</button>
+			</div>
+			<p class="pt-1 text-[13px] text-paper">Every other week. Unsubscribe anytime.</p>
+		</form>
+	</div>
+</section>
+
+<script>
+	const initNewsletter = () => {
+		const form = document.getElementById('newsletter-form');
+		if (!form || form.dataset.bound === 'true') return;
+		form.dataset.bound = 'true';
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+		});
+	};
+
+	document.addEventListener('astro:page-load', initNewsletter);
+	initNewsletter();
+</script>
